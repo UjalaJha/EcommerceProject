@@ -10,16 +10,22 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+use App\City;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 
-
-
+//with datable.js
 Route::resource('city', 'CityController');
-Route::post('/city/list','CityController@fetch');
 Route::get('/city','CityController@index');
-
-
-Route::get('/', function () {
-    return view('citytest');
-});
+Route::get('/json','CityController@jsondata');
+Route::post ( '/deleteitem','CityController@delete' );
+Route::post ( '/edititem','CityController@editdata' );
+//test without datable.js
 Route::post('/cityTest/list','CityTestController@getCity');
 Route::get('/citytest','CityTestController@index');
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+	

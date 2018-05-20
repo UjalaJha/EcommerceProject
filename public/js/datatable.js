@@ -36,7 +36,7 @@ $(document).ready(function() {
 			"bServerSide": true,
 			"iDisplayLength":noofrecords,
 			"aaSorting":[],
-			"sAjaxSource": "/city/list?act=fetch",
+			"sAjaxSource": "/json",
 			"fnInitComplete": function(oSettings, json) {
 				$('.dataTables_filter>label>input').parent().remove();				
 		    },
@@ -47,10 +47,7 @@ $(document).ready(function() {
 		    	$(".searchInput").each(function(){
 		    		aoData.push( { "name": "Searchkey_"+searchCount, "value": $(this).val() } );
 		    		searchCount++;
-		    	});
-		        /*aoData.push( { "name": "addedpull", "value": $("#addedpull").val() } );
-		        aoData.push( { "name": "id", "value": $("#id").val()});
-		        aoData.push( { "name": "deleted_id", "value": $("#deleted_id").val() } );		        */
+		    	})
 		     },
 		    "fnDrawCallback": function( oSettings ) {
 		    	if (typeof datatablecomplete == 'function') { 

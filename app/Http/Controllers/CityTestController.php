@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\CityTest;
+use App\City;
 
 class CityTestController extends Controller
 {
@@ -15,14 +15,14 @@ class CityTestController extends Controller
     }
 
     public function getCity(Request $request){
-		// print_r($request->all());
+		//print_r($request->all());
 		$columns = array(
 			0 => 'city_name',
 			1 => 'status',
 			3 => 'action'
 		);
 		
-		$totalData = CityTest::count();
+		$totalData = City::count();
 		$limit = $request->input('length');
 		$start = $request->input('start');
 		$order = $columns[$request->input('order.0.column')];
@@ -30,21 +30,21 @@ class CityTestController extends Controller
 		
 		if(empty($request->input('search.value')))
 		{
-			$cities = CityTest::offset($start)
+			$cities = City::offset($start)
 					->limit($limit)
 					->orderBy($order,$dir)
 					->get();
-			$totalFiltered = CityTest::count();
+			$totalFiltered = City::count();
 		}else
 		{
 			$search = $request->input('search.value');
-			$cities = CityTest::where('city_name', 'like', "%{$search}%")
+			$cities = City::where('city_name', 'like', "%{$search}%")
 					->orWhere('status','like',"%{$search}%")
 					->offset($start)
 					->limit($limit)
 					->orderBy($order, $dir)
 					->get();
-			$totalFiltered = CityTest::where('city_name', 'like', "%{$search}%")
+			$totalFiltered = City::where('city_name', 'like', "%{$search}%")
 							->orWhere('status','like',"%{$search}%")
 							->count();
 		}		
@@ -73,5 +73,6 @@ class CityTestController extends Controller
 		
 		echo json_encode($json_data);
 	}
+
 
 }

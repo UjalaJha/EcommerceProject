@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\City;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Input;
 
 class CityController extends Controller
 {
@@ -82,46 +84,131 @@ class CityController extends Controller
      */
     public function destroy($id)
     {
-        //
+        
+    }
+    public function editdata(Request $request)
+    {
+         $rules = array (
+            'city_name' => 'required|alpha',
+            );
+        $validator = Validator::make ( Input::all (), $rules );
+        if ($validator->fails ())
+        return Response::json ( array (             
+                'errors' => $validator->getMessageBag()->toArray () 
+        ) );
+        else {
+            $data = City::find ( $request->city_id );
+            $data->city_name = ($request->city_name);
+            $data->status = ($request->status);
+            $data->save ();
+            return response ()->json ( $data );
+        }
     }
 
-    public function fetch(){
-    
-    //call getrecords function from the Testmodel
-    //print_r($_GET);
-    //die();
-    $city = new City();
-    $get_result = $city->getRecords($_GET);
-    
 
-    //Response from server 
-    //declare result as an array
-    $result = array();
-    //sEcho --
-    $result["sEcho"]= $_GET['sEcho'];
-    //iTotalRecords -- total records before filtering
-    $result["iTotalRecords"] = $get_result['totalRecords']; 
-    //iTotalDisplayRecords -- total records after filtering                         
-    $result["iTotalDisplayRecords"]= $get_result['totalRecords'];                             
     
-    //declare items as array
-    $items = array();
-    for($i=0;$i<sizeof($get_result['query_result']);$i++){
-        $temp = array();
-        array_push($temp, $get_result['query_result'][$i]->city_name );
-        array_push($temp, $get_result['query_result'][$i]->status );
-        array_push($items, $temp);
+    public function delete(Request $request)
+    {
+        City::find($request->id)->delete ();
+        return response()->json();
     }
+    public function jsondata(Request $request)
+    {
 
-    //2D array of data
-    $result["aaData"] = $items;
-    $result["success"]=true;
+        $table = "city";
+        $table_id = 'city_id';
+        $default_sort_column = 'city_name';
+        $default_sort_order = 'asc';
+        $totalData = City::count();
+        $condition = true;
+        $page = $request->input('iDisplayStart');
+        $rows = $request->input('iDisplayLength'); 
+        //$sort=$default_sort_column;
+        //$order=$default_sort_order;
+        $colArray = array(
+            0 => 'city_name',
+            1 => 'status',
+            3 => 'action'
+        );
 
-    // convert the result array to json format
-    echo json_encode($result);
-    exit;   
-    
- }
+        if($request->input('iSortCol_0')!=NULL)
+        {
+             $sort= $colArray[$request->input('iSortCol_0')];
+        }else
+        {
+             $sort=$default_sort_column;
+        }
+        if($request->input('sSortDir_0')!=NULL)
+        {
+             $order=strval($request->input('sSortDir_0'));
+        }else
+        {
+             $order=$default_sort_order;
+        }
 
+
+        
+        $cities = City::orderBy($sort, $order)
+                    ->offset($page)
+                    ->limit($rows)
+                    ->get();
+        $totalFiltered = City::count();
+
+        if(empty($request->input('sSearch_0')))
+        {
+            $cities = City::orderBy($sort, $order)
+                    ->offset($page)
+                    ->limit($rows)
+                    ->get();
+            $totalFiltered = City::count();
+        }else
+        {
+            $search = $request->input('sSearch_0');
+            $cities = City::where('city_name', 'like', "%{$search}%")
+                    ->orWhere('status','like',"%{$search}%")
+                    ->orderBy($sort, $order)
+                    ->limit($rows,$page)
+                    ->get();
+            $totalFiltered = City::where('city_name', 'like', "%{$search}%")
+                            ->orWhere('status','like',"%{$search}%")
+                            ->count();
+        }   
+
+
+
+        $result = array();   
+        $result["sEcho"]= $request->input('sEcho');
+        $result["iTotalRecords"] =  $totalFiltered; 
+        $result["iTotalDisplayRecords"]=  $totalFiltered;
+
+
+        $items = array();
+        if($cities){
+            foreach($cities as $i)
+            {
+                $temp = array();
+                array_push($temp, $i->city_name);
+                array_push($temp, $i->status);
+                $actionCol = "";
+                $actionCol ='<button class="delete-modal btn btn-info" data-identity="'.$i->city_id.'"
+                            data-name="'.$i->city_name.'">
+                            <span class="glyphicon glyphicon-trash"></span> Delete
+                            </button>
+                            <button class="edit-modal btn btn-danger"
+                            data-info="'.$i->city_id.','.$i->city_name.','.$i->status.'">
+                            <span class="glyphicon glyphicon-edit"></span> Edit
+                            </button>';
+                array_push($temp, $actionCol);
+                array_push($items, $temp);
+            }
+        }
+        $result["aaData"] = $items;
+        $result["success"]=true;
+
+        // convert the result array to json format
+        echo json_encode($result);
+        exit;   
+        
+    }
 
 }
