@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use App\City;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Input;
+use DB;
 
 class CityController extends Controller
 {
@@ -18,6 +16,10 @@ class CityController extends Controller
      */
     public function index()
     {
+        // error_log('Some message here.');
+        // $this->info('Display this on the screen');
+        // Log::info('Showing user profile for user: ');
+        //print_r("Hello");
         return view('city');
     }
 
@@ -84,37 +86,29 @@ class CityController extends Controller
      */
     public function destroy($id)
     {
-        
+        //
     }
+
+    //Fetch and edit data from DB 
     public function editdata(Request $request)
     {
-         $rules = array (
-            'city_name' => 'required|alpha',
-            );
-        $validator = Validator::make ( Input::all (), $rules );
-        if ($validator->fails ())
-        return Response::json ( array (             
-                'errors' => $validator->getMessageBag()->toArray () 
-        ) );
-        else {
-            $data = City::find ( $request->city_id );
-            $data->city_name = ($request->city_name);
-            $data->status = ($request->status);
-            $data->save ();
-            return response ()->json ( $data );
-        }
+         
+        $data = City::find ( $request->city_id );
+        $data->city_name = ($request->city_name);
+        $data->status = ($request->status);
+        $data->save ();
+        return response ()->json ( $data );
     }
-
-
     
+
+    //Fetch and delete data from DB 
     public function delete(Request $request)
     {
         City::find($request->id)->delete ();
         return response()->json();
     }
-    public function jsondata(Request $request)
+        public function jsondata(Request $request)
     {
-
         $table = "city";
         $table_id = 'city_id';
         $default_sort_column = 'city_name';
@@ -130,7 +124,6 @@ class CityController extends Controller
             1 => 'status',
             3 => 'action'
         );
-
         if($request->input('iSortCol_0')!=NULL)
         {
              $sort= $colArray[$request->input('iSortCol_0')];
@@ -145,15 +138,12 @@ class CityController extends Controller
         {
              $order=$default_sort_order;
         }
-
-
         
         $cities = City::orderBy($sort, $order)
                     ->offset($page)
                     ->limit($rows)
                     ->get();
         $totalFiltered = City::count();
-
         if(empty($request->input('sSearch_0')))
         {
             $cities = City::orderBy($sort, $order)
@@ -173,15 +163,10 @@ class CityController extends Controller
                             ->orWhere('status','like',"%{$search}%")
                             ->count();
         }   
-
-
-
         $result = array();   
         $result["sEcho"]= $request->input('sEcho');
         $result["iTotalRecords"] =  $totalFiltered; 
         $result["iTotalDisplayRecords"]=  $totalFiltered;
-
-
         $items = array();
         if($cities){
             foreach($cities as $i)
@@ -190,11 +175,11 @@ class CityController extends Controller
                 array_push($temp, $i->city_name);
                 array_push($temp, $i->status);
                 $actionCol = "";
-                $actionCol ='<button class="delete-modal btn btn-info" data-identity="'.$i->city_id.'"
+                $actionCol ='<button class="delete-modal btn btn-primary" data-identity="'.$i->city_id.'"
                             data-name="'.$i->city_name.'">
                             <span class="glyphicon glyphicon-trash"></span> Delete
                             </button>
-                            <button class="edit-modal btn btn-danger"
+                            <button class="edit-modal btn btn-primary"
                             data-info="'.$i->city_id.','.$i->city_name.','.$i->status.'">
                             <span class="glyphicon glyphicon-edit"></span> Edit
                             </button>';
@@ -204,11 +189,9 @@ class CityController extends Controller
         }
         $result["aaData"] = $items;
         $result["success"]=true;
-
         // convert the result array to json format
         echo json_encode($result);
         exit;   
         
     }
-
 }

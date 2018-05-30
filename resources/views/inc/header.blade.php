@@ -147,16 +147,8 @@
 				
 				<li class="treeview"><a href="#"><i class="fa fa-laptop"></i><span style="font-size: 100%;">Master's</span><i class="fa fa-angle-right"></i></a>
 					<ul class="treeview-menu">
-						<li class="active"><a href="/banners"><i class="fa fa-dashboard"></i><span>Banners</span></a></li>
-						<li class="active"><a href="/categories"><i class="fa fa-dashboard"></i><span>Categories</span></a></li>
-						<li class="active"><a href="/subcategory"><i class="fa fa-dashboard"></i><span>Subcategory</span></a></li>
 						<li class="active"><a href="/products"><i class="fa fa-dashboard"></i><span>Products</span></a></li>
-						<li class="active"><a href="/email"><i class="fa fa-dashboard"></i><span>Email Content</span></a></li>
-						<li class="active"><a href="/pages"><i class="fa fa-dashboard"></i><span>Pages</span></a></li>
-						<li class="active"><a href="/discount_offers"><i class="fa fa-dashboard"></i><span>Discount offers</span></a></li>
-						<li class="active"><a href="/contact"><i class="fa fa-dashboard"></i><span>Contacts</span></a></li>
-						<li class="active"><a href="/customers"><i class="fa fa-dashboard"></i><span>Customers</span></a></li>
-						<li class="active"><a href="/index.php/test"><i class="fa fa-dashboard"></i><span>Test</span></a></li>
+						<li class="active"><a href="/city"><i class="fa fa-dashboard"></i><span>City</span></a></li>
 					</ul>
 				</li>   
           </ul>

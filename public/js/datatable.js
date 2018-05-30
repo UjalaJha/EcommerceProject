@@ -1,10 +1,14 @@
+
 // document ready function
 var asInitVals = new Array();
 var oTable;
 $(document).ready(function() { 	
 	//--------------- Data tables ------------------//
 	var filename = window.location.pathname.substr(window.location.pathname.lastIndexOf("/")+1);
-	//alert(filename);
+	// console.log(filename);
+	// console.log('Hello');
+	// console.log("/"+filename+"json");
+	
 	
 	var bFilter = true;
     if($('table').hasClass('nofilter')){
@@ -23,10 +27,11 @@ $(document).ready(function() {
         	}
         }
     });
-
+	
 	if($('table').hasClass('dynamicTable')){
-		noofrecords = $(".dynamicTable").attr("noofrecords");
-		//console.log(filename);		
+
+		
+		noofrecords = $(".dynamicTable").attr("noofrecords");		
 		oTable = $('.dynamicTable').dataTable({
 			"sPaginationType": "full_numbers",			
 			"bJQueryUI": false,
@@ -36,18 +41,24 @@ $(document).ready(function() {
 			"bServerSide": true,
 			"iDisplayLength":noofrecords,
 			"aaSorting":[],
-			"sAjaxSource": "/json",
+			"sAjaxSource": "/"+filename+"json",
 			"fnInitComplete": function(oSettings, json) {
 				$('.dataTables_filter>label>input').parent().remove();				
 		    },
+
 		    "aoColumnDefs": [{ "bSortable": bFilter, "aTargets": [ -1 ] }],
 		    "aoColumns": columnSort,
 		    "fnServerParams": function ( aoData ) {
+		    	console.log(aoData);
+		  
 		    	var searchCount = 0;
 		    	$(".searchInput").each(function(){
 		    		aoData.push( { "name": "Searchkey_"+searchCount, "value": $(this).val() } );
 		    		searchCount++;
-		    	})
+		    	});
+		        /*aoData.push( { "name": "addedpull", "value": $("#addedpull").val() } );
+		        aoData.push( { "name": "id", "value": $("#id").val()});
+		        aoData.push( { "name": "deleted_id", "value": $("#deleted_id").val() } );		        */
 		     },
 		    "fnDrawCallback": function( oSettings ) {
 		    	if (typeof datatablecomplete == 'function') { 
@@ -69,6 +80,7 @@ $(document).ready(function() {
 			/* Filter on the column (the index) of this element */
 			oTable.fnFilter( this.value, oTable.oApi._fnVisibleToColumnIndex(oTable.fnSettings(), $(".searchInput").index(this) ) );
 		} );
+
 	}
 	
 	/*
@@ -220,6 +232,31 @@ $(document).ready(function() {
 		}
 	});
 });//End document ready functions
+
+
+function clearSearchFilters()
+{
+/*
+* Clear Filters and refresh data table
+* First it clear all the fields and call its event
+*/ 
+
+$('.dataTables_filter input').val('');
+$('.dataTables_filter select').prop('selectedIndex',0);
+
+if($('select').hasClass('select2'))
+{
+$('.select2').val("");
+$('.select2').trigger('change.select2');
+}
+
+var oSettings = oTable.fnSettings();
+  for(iCol = 0; iCol < oSettings.aoPreSearchCols.length; iCol++) {
+      oSettings.aoPreSearchCols[ iCol ].sSearch = '';
+  }
+  oTable.fnDraw();
+ 
+}
 
 function pageReload()
 {	

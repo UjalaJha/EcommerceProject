@@ -1,6 +1,6 @@
 @include('inc.header')
 <div id="content" class="content-wrapper">
-	<div class="page-title">
+  <div class="page-title">
       <div>
         <h1>TEST PAGE</h1>            
       </div>
@@ -10,7 +10,7 @@
           <li><a href="/test">TEST</a></li>
         </ul>
       </div>
-    </div>      	      	
+    </div>                
     <div class="card">
       <div class="page-title-border">
       <div class="col-sm-12 col-md-6">
@@ -38,7 +38,7 @@
                             <th>CITY</th>
                             <th>STATUS</th>
                             <th>ACTION</th>
-                     	</tr>
+                      </tr>
                     </thead>
                     <tbody>
                     </tbody>
@@ -49,7 +49,7 @@
         </div> 
       </div>
     </div>            
-</div><!-- end: Content -->		
+</div><!-- end: Content -->   
 
 <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -101,10 +101,10 @@
         </div>
       </div>
     </div>
-  </div>	
+  </div>  
 <script>
 $( document ).ready(function() {
-	
+  
 });
 document.title = "Cities";
 </script>
@@ -131,14 +131,11 @@ document.title = "Cities";
         fillmodalData(stuff)
         $('#myModal').modal('show');
     });
-
-
   function fillmodalData(details){
     $('#id').val(details[0]);
     $('#cityname').val(details[1]);
     $('#status').val(details[2]);
 }
-
 $('.modal-footer').on('click', '.edit', function() {
   // var status=$('#status').val();
   // alert(status);
@@ -165,8 +162,6 @@ $('.modal-footer').on('click', '.edit', function() {
             }
         });
     });
-
-
 </script>
 
 
@@ -190,13 +185,11 @@ $('.modal-footer').on('click', '.edit', function() {
         console.log("THIS:", va);
         $('#myModal').modal('show');
     });
-
       $('.modal-footer').on('click', '.delete', function() {
           var id = $('.did').text();
           var data = 'recordToDelete='+ id;
           var parent = $('.did')
           console.log(parent);
-
           $.ajax({
           type: 'post',
           url: '/deleteitem',
@@ -210,6 +203,7 @@ $('.modal-footer').on('click', '.edit', function() {
               //alert(id);
               //setTimeout("location.reload(true);",50);
               // va.fadeOut('slow', function() {$(va).remove();});
+              //clearSearchFilters();
               $(va).remove();
           }
       });
