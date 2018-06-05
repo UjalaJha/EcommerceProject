@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\City;
 use DB;
+use Excel;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Redirect;
+
 
 class CityController extends Controller
 {
@@ -93,11 +98,11 @@ class CityController extends Controller
     public function editdata(Request $request)
     {
          
-        $data = City::find ( $request->city_id );
+        $data = City::find($request->city_id);
         $data->city_name = ($request->city_name);
         $data->status = ($request->status);
-        $data->save ();
-        return response ()->json ( $data );
+        $data->save();
+        return response()->json($data);
     }
     
 
@@ -126,24 +131,26 @@ class CityController extends Controller
         );
         if($request->input('iSortCol_0')!=NULL)
         {
-             $sort= $colArray[$request->input('iSortCol_0')];
+            $sort= $colArray[$request->input('iSortCol_0')];
         }else
         {
-             $sort=$default_sort_column;
+            $sort=$default_sort_column;
         }
         if($request->input('sSortDir_0')!=NULL)
         {
-             $order=strval($request->input('sSortDir_0'));
+            $order=strval($request->input('sSortDir_0'));
         }else
         {
-             $order=$default_sort_order;
+            $order=$default_sort_order;
         }
         
         $cities = City::orderBy($sort, $order)
                     ->offset($page)
                     ->limit($rows)
                     ->get();
+
         $totalFiltered = City::count();
+
         if(empty($request->input('sSearch_0')))
         {
             $cities = City::orderBy($sort, $order)
@@ -151,7 +158,8 @@ class CityController extends Controller
                     ->limit($rows)
                     ->get();
             $totalFiltered = City::count();
-        }else
+        }
+        else
         {
             $search = $request->input('sSearch_0');
             $cities = City::where('city_name', 'like', "%{$search}%")
@@ -194,4 +202,74 @@ class CityController extends Controller
         exit;   
         
     }
+
+
+    
+
+    public function export()
+    {
+        
+        $data = City::get()->toArray();
+        return Excel::create('city list', function($excel) use ($data) {
+            $excel->sheet('mySheet', function($sheet) use ($data)
+            {
+                $sheet->fromArray($data);
+            });
+
+        })->download('pdf');
+    }
+    public function import(Request $request)
+    {
+        
+        if(Input::hasFile('import_file'))
+        {
+            
+            $path = Input::file('import_file')->getRealPath();
+            $data = Excel::load($path, function($reader) {
+            })->get();
+            if (Schema::hasTable('data'))
+            {
+                $request->session()->flash('alert-warning', 'The data already exists!');
+                return redirect('/city');
+            }
+            else
+            {
+               Schema::create('data', function($table)
+                {
+                    $table->increments('id');
+                    $table->integer('pid');
+                    $table->string('name');
+                });
+                if(!empty($data) && $data->count())
+                {               
+                    foreach ($data as $key => $value) {
+                        $insert[] = ['pid' => $value->pid, 'name' => $value->name];
+                    }
+                    if(!empty($insert)){
+                        DB::table('data')->insert($insert);
+                        $request->session()->flash('alert-success', 'Data was successful Imported!');
+                        return redirect('/city');
+                        //echo ('Record inserted successfully.');
+                    }
+                    else 
+                    {
+                        $request->session()->flash('alert-warning', 'Data import was unsuccessful!');
+                        return redirect('/city');
+                    }
+                }
+                else
+                {
+                     $request->session()->flash('alert-warning', 'No data to import!');
+                    return redirect('/city');
+                }
+                
+            }   
+        }
+        else
+        {
+            $request->session()->flash('alert-warning', 'File not added!');
+            return redirect('/city');
+        } 
+        
+    }  
 }

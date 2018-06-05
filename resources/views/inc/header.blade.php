@@ -149,6 +149,7 @@
 					<ul class="treeview-menu">
 						<li class="active"><a href="/products"><i class="fa fa-dashboard"></i><span>Products</span></a></li>
 						<li class="active"><a href="/city"><i class="fa fa-dashboard"></i><span>City</span></a></li>
+						<li class="active"><a href="/purchase"><i class="fa fa-dashboard"></i><span>Purchase</span></a></li>
 					</ul>
 				</li>   
           </ul>

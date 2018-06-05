@@ -83,6 +83,25 @@ class ProductController extends Controller
     {
         //
     }
+    public function purchase()
+    {
+
+        return view('productbuy');
+    }
+    public function printcopy()
+    {
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadView('pdf');
+        // $pdf = PDF::loadView('pdf.invoice', $data);
+        return $pdf->stream();
+    }
+    public function deletepicture(Request $request)
+    {
+
+        ProductImages::find($request->product_image_id)->delete ();
+        return response()->json();
+    
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -132,14 +151,17 @@ class ProductController extends Controller
                 $result->save();
                 $id=$result->product_id;
 
-                foreach($request->catalog_image_title as $key=>$value)
+
+                if(!empty($request->catalog_image_title ))
+                {
+                  foreach($request->catalog_image_title as $key=>$value)
                 { 
-                    $file = $request->File('file'.$key)->getPathName();
-                    $imageName = $request->File('file'.$key)->getClientOriginalName();
-                    $path = base_path() . '/public/cover_images/';
-                    $request->File('file'.$key)->move($path , $imageName);
-                    if($file)
+                    if($request->file.$key)
                     {
+                        $file = $request->File('file'.$key)->getPathName();
+                        $imageName = $request->File('file'.$key)->getClientOriginalName();
+                        $path = base_path() . '/public/cover_images/';
+                        $request->File('file'.$key)->move($path , $imageName);
                         $fileNameToStore = $imageName;
                     }
                     else
@@ -168,7 +190,9 @@ class ProductController extends Controller
                     }
                    
 
+                }  
                 }
+                
 
 
                 if(!empty($result))
@@ -187,12 +211,26 @@ class ProductController extends Controller
             else
             {
                 //for new entries
-                $this->validate($request, [
-                'product_name' => 'required|unique:tbl_products',
-                'product_code' => 'required|unique:tbl_products',
-                'meta_title' => 'required'
+                // $this->validate($request, [
+                // 'product_name' => 'required|unique:tbl_products',
+                // 'product_code' => 'required|unique:tbl_products',
+                // 'meta_title' => 'required'
+                // ]);
+                $validator = Validator::make($request->all(), [
+                    'product_name' => 'required|unique:tbl_products',
+                    'product_code' => 'required|unique:tbl_products',
+                    'meta_title' => 'required',
                 ]);
-    
+
+                //to edit json
+                if ($validator->fails()) {
+                   $errors = [];
+                    foreach($validator->getMessageBag()->toArray() as $key=>$messages) {
+                        $errors[$key] = $messages[0];
+                    }
+                    return response()->json($errors, 322);
+                }
+
                 $result=new Product;
                 $result->product_name = $request->product_name;
                 $result->product_code= $request->product_code;
@@ -213,12 +251,13 @@ class ProductController extends Controller
 
                 foreach($request->catalog_image_title as $key=>$value)
                 { 
-                    $file = $request->File('file'.$key)->getPathName();
-                    $imageName = $request->File('file'.$key)->getClientOriginalName();
-                    $path = base_path() . '/public/cover_images/';
-                    $request->File('file'.$key)->move($path , $imageName);
-                    if($file)
+                    
+                    if($request->file.$key)
                     {
+                        $file = $request->File('file'.$key)->getPathName();
+                        $imageName = $request->File('file'.$key)->getClientOriginalName();
+                        $path = base_path() . '/public/cover_images/';
+                        $request->File('file'.$key)->move($path , $imageName);
                         $fileNameToStore = $imageName;
                     }
                     else

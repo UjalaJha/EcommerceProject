@@ -1,54 +1,85 @@
 @include('inc.header')
 <div id="content" class="content-wrapper">
+
   <div class="page-title">
-      <div>
+    <div>
         <h1>TEST PAGE</h1>            
+    </div>
+
+    <div>
+      <ul class="breadcrumb">
+        <li><a href="/home"><i class="fa fa-home fa-lg"></i></a></li>
+        <li><a href="/test">TEST</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="page-title-border">
+      <div class="col-sm-12">
+        <div class="box-content">
+          <div class="flash-message">
+            @foreach (['danger', 'warning', 'success', 'info'] as $msg)
+              @if(Session::has('alert-' . $msg))
+
+              <p class="alert alert-{{ $msg }} fade in">{{ Session::get('alert-' . $msg) }} <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a></p>
+              @endif
+            @endforeach
+          </div> <!-- end .flash-message -->
+          <div class="col-sm-4 dataTables_filter searchFilterClass form-group">
+            <label for="firstname" class="control-label">Search</label>
+            <input id="sSearch_0" name="sSearch_0" type="text" class="searchInput form-control"/>
+          </div>
+
+          <div class="col-sm-4 dataTables_filter searchFilterClass form-group" style="margin-top: 3%;">
+              <div class="controls">
+                  <a href="/test"><button class="btn btn-primary">Clear Search</button></a>
+              </div>
+          </div>
+
+            <p style="float: right;margin-top: 3%;"><a href="/export"><button class="btn btn-primary">Export to Excel</button></a></p> 
+            
+            <p style="float: left;margin-right: 0%;">
+              <form class="form-horizontal" action="{{ URL::to('import') }}" method="post" enctype="multipart/form-data">
+                <button class="btn btn-primary">Import to Excel</button>
+                <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
+                <!-- <input id="file1" name="import_file" class="form-control required" type="file"> -->
+              <!-- <input type="file"name="import_file" /> -->
+              <div class="float">
+              
+              <input type="file"name="import_file" /> 
+              </div>
+              </form>
+            </p>
+
+        </div>
+
+        <div class="clearfix"></div>
       </div>
-      <div>
-        <ul class="breadcrumb">
-          <li><a href="/home"><i class="fa fa-home fa-lg"></i></a></li>
-          <li><a href="/test">TEST</a></li>
-        </ul>
-      </div>
-    </div>                
-    <div class="card">
-      <div class="page-title-border">
-      <div class="col-sm-12 col-md-6">
-        <div class="box-content form-inline">
-            <div class="dataTables_filter searchFilterClass form-group">
-                <label for="firstname" class="control-label">Search</label>
-                <input id="sSearch_0" name="sSearch_0" type="text" class="searchInput form-control"/>
-            </div>
-            <div class="control-group clearFilter form-group" style="margin-left:5px;">
-                <div class="controls">
-                    <a href="/test"><button class="btn btn-primary">Clear Search</button></a>
-                </div>
-            </div>
-         </div>
-         <div class="clearfix"></div>
-      </div>
-      </div>
+
+      <div class="clearfix"></div>
+    </div>
       <div class="clearfix"></div>
       <div class="card-body">
         <div class="box-content">
-            <div class="table-responsive scroll-table">
-                <table class="dynamicTable example display table table-bordered non-bootstrap">
-                    <thead>
-                        <tr>
-                            <th>CITY</th>
-                            <th>STATUS</th>
-                            <th>ACTION</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                    <tfoot>
-                    </tfoot>
-                </table> 
-            </div>           
+          <div class="table-responsive scroll-table">
+            <table class="dynamicTable example display table table-bordered non-bootstrap">
+              <thead>
+                  <tr>
+                      <th>CITY</th>
+                      <th>STATUS</th>
+                      <th>ACTION</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+              <tfoot>
+              </tfoot>
+            </table> 
+          </div>           
         </div> 
-      </div>
-    </div>            
+      </div> 
+      </div>          
 </div><!-- end: Content -->   
 
 <div id="myModal" class="modal fade" role="dialog">
