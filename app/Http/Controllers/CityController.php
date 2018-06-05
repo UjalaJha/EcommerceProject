@@ -260,7 +260,7 @@ class CityController extends Controller
                 else
                 {
                      $request->session()->flash('alert-warning', 'No data to import!');
-                    return redirect('/city');
+                        return redirect('/city');
                 }
                 
             }   
