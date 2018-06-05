@@ -17,9 +17,6 @@
          <div class="card-body">             
             <div class="box-content">
             	<div class="col-sm-8 col-md-4">
-
-                
-
                		<form class="form-horizontal" id="form-validate" method="post" enctype="multipart/form-data">
 
                			<input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
@@ -115,10 +112,12 @@
                                         }
                                         ?>
 
+                                      <input  type="file" id="filec" name="filec" class="form-control" />
+
                                      
                                         <input type="hidden" name="product_image_name[<?php echo $i;?>]" value="<?php if(!empty($image['product_image_name'])) echo $image['product_image_name']; ?>">
 
-                                        <input type="hidden" name="product_image_id[<?php echo $i;?>]" value="<?php if(!empty($image['product_image_id'])) echo $image['product_image_id']; ?>">
+                                        <input type="hidden" name="product_image_id[<?php echo $i;?>]" id=value value="<?php if(!empty($image['product_image_id'])) echo $image['product_image_id']; ?>">
                                       </td>
 
                                       <td>
@@ -215,7 +214,7 @@
                                   <?php
                                 }
                                 ?>
-                                s
+                                
                           
                                 
 
@@ -250,24 +249,24 @@
 
 
                         <!-- status -->
-                        <div class="control-group form-group">
-                            <label class="control-label" for="fix_comission">Status*</label>
-                            <div class="controls">
-                                    <select name="status" class="input-xlarge form-control">
-                                        <option value="Active" <?php if(!empty($data->status) && $data->status=="Active"){ echo "selected='selected'"; } ?>>Active</option>
-                                        <option value="In-active" <?php if(!empty($data->status) && $data->status=="In-active"){ echo "selected='selected'"; } ?>>Inactive</option>
-                                    </select>
-                            </div>
-                        </div>
+            <div class="control-group form-group">
+                <label class="control-label" for="fix_comission">Status*</label>
+                <div class="controls">
+                        <select name="status" class="input-xlarge form-control">
+                            <option value="Active" <?php if(!empty($data->status) && $data->status=="Active"){ echo "selected='selected'"; } ?>>Active</option>
+                            <option value="In-active" <?php if(!empty($data->status) && $data->status=="In-active"){ echo "selected='selected'"; } ?>>Inactive</option>
+                        </select>
+                </div>
+            </div>
                       
 
-                      <!-- submit  -->
-                        <div class="form-actions form-group">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                            <a href="/products" class="btn btn-primary">Cancel</a>
-                        </div>
+            <!-- submit  -->
+              <div class="form-actions form-group">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <a href="/products" class="btn btn-primary">Cancel</a>
+              </div>
 
-                    </form>
+              </form>
 
                 </div>
 
@@ -280,22 +279,22 @@
 
 <script>
 
-	var vRules = {
-	// product_name:{required:true},
-	// product_code:{required:true},
-	// product_price:{required:true,number: true,min:0 },
-	// quantity:{required:true,number: true,min:0 },
-	// status:{required:true}
-	
-	};
+  var vRules = {
+  product_name:{required:true},
+  product_code:{required:true},
+  product_price:{required:true,number: true,min:0 },
+  quantity:{required:true,number: true,min:0 },
+  status:{required:true}
+  
+  };
 
-	var vMessages = {
-	product_name:{required:"Please enter product name."},
-	product_code:{required:"Please enter product code."},
-	product_price:{required:"Please enter product price.",number: "Please enter valid price.", min: "Product price must be atleast 0 or more."},
-  	quantity:{required:"Please enter quantity",number: "Please enter valid quantity" ,min: "Product quantity must be atleast 0 or more."},
-	status:{required:"Please select product status" }
-	};
+  var vMessages = {
+  product_name:{required:"Please enter product name."},
+  product_code:{required:"Please enter product code."},
+  product_price:{required:"Please enter product price.",number: "Please enter valid price.", min: "Product price must be atleast 0 or more."},
+    quantity:{required:"Please enter quantity",number: "Please enter valid quantity" ,min: "Product quantity must be atleast 0 or more."},
+  status:{required:"Please select product status" }
+  };
 
 $.validator.addMethod("lettersonly", function(value, element) {
   return this.optional(element) || /^[a-z]+$/i.test(value);
@@ -303,223 +302,224 @@ $.validator.addMethod("lettersonly", function(value, element) {
 
 
 $("#form-validate").validate({
-	rules: vRules,
-	messages: vMessages,
-	submitHandler: function(form) 
-	{
-		var act = "/productsubmitForm";
-		$("#form-validate").ajaxSubmit({
-			url: '/productsubmitForm', 
-			type: 'POST',
-			cache: false,
-			clearForm: false, 
-			_token: $('#token').val(),
-			beforeSubmit : function(arr, $form, options){
-				$(".btn-primary").prop('disabled',true);
-				//return false;
-			},
-			success: function (response) {
-				var res = eval('('+response+')');
-				if(res['success'] == "1")
-				{
-					displayMsg("success",res['msg']);
-					$(".btn-primary").show();
-					setTimeout(function(){
-						window.location = "/products";
-					},2000); 
-				}
-				else
-				{	
-					//$("#error_msg").show();
-					displayMsg("error",res['msg']);
-					$(".btn-primary").prop('disabled',false);
-					return false;
-				}
-				$(".btn-primary").prop('disabled',false);
-			},
+  rules: vRules,
+  messages: vMessages,
+  submitHandler: function(form) 
+  {
+    var act = "/productsubmitForm";
+    $("#form-validate").ajaxSubmit({
+      url: '/productsubmitForm', 
+      type: 'POST',
+      cache: false,
+      clearForm: false, 
+      _token: $('#token').val(),
+      beforeSubmit : function(arr, $form, options){
+        $(".btn-primary").prop('disabled',true);
+        //return false;
+      },
+      success: function (response) {
+        var res = eval('('+response+')');
+        if(res['success'] == "1")
+        {
+          displayMsg("success",res['msg']);
+          $(".btn-primary").show();
+          setTimeout(function(){
+            window.location = "/products";
+          },2000); 
+        }
+        else
+        { 
+          //$("#error_msg").show();
+          displayMsg("error",res['msg']);
+          $(".btn-primary").prop('disabled',false);
+          return false;
+        }
+        $(".btn-primary").prop('disabled',false);
+      },
       error: function(response){
-        // write Cap n, I cant
-        // alert(responseJSON);
-        // for(err as response)
+      
+      //  using alert
         var text = response.responseJSON
-        // alert(text)
         var msg = ""; 
-        // Ye kaisa representation he wtf array nahi he vo?
-        console.log(response.responseJSON);
+        //console.log(response.responseJSON);
 
         for (var key in text) {
-          if (text.hasOwnProperty(key)) {
-            console.log(key + " -> " + text[key]);
-            msg +=text[key] + "\n";
+          if (text.hasOwnProperty(key)) 
+          {
+            //console.log(key + " -> " + text[key]);
+            msg =text[key] + "\n";
+            if (msg.length > 0) 
+            {
+              displayMsg("success",msg);
+              $(".btn-primary").show();
+              // alert(msg)  
+            }
           }
         } 
-        console.log(msg);
-        if (msg.length > 0) {
-          alert(msg)  
-        }
+        //console.log(msg);
+
+        //To use alert
+        // if (msg.length > 0) 
+        // {
+        //   displayMsg("success",msg);
+        //   $(".btn-primary").show();
+        //   // alert(msg)  
+        // }
         $(".btn-primary").prop('disabled',false);
       } 
 
-		});
-	}
+    });
+  }
 });
 
 document.title = "Add/Edit Product";
 
 
 
-	$( document ).ready(function() 
-	{
-		$(".addCatalogImage").click(function(){
-			var index = 1;
-			
-			$("#tbl_catalog_images tbody tr").each(function(){
-				index = index + 1;
-			});
-			
-			$html = "<tr>"+
-						"<td>"+
-							"<input type='file' id='file"+index+"' name='file"+index+"' class='form-control required' />"+
-							
-							"<input type='hidden' name='catalog_image_name["+index+"]' id='catalog_image_name"+index+"'>"+
-							"<input type='hidden' name='catalog_image_id["+index+"]' id='catalog_image_id"+index+"'>"+
-						"</td>"+
-						
-						"<td>"+
-							"<input type='text' id='catalog_image_title"+index+"' name='catalog_image_title["+index+"]' class='form-control catalog_image_title required' />"+
-						"</td>"+
-						
-						"<td>"+
-							"<input type='number' id='catalog_image_price"+index+"' name='catalog_image_price["+index+"]' class='form-control required' />"+
-						"</td>"+
-						
-						"<td>"+
-							"<select type='text' id='default"+index+"' name='default["+index+"]' class='form-control default required'>"+
-								"<option value='0'>No</option>"+
-								"<option value='1'>Yes</option>"+
-							"</select>"+
-						"</td>"+
-						
-						"<td>"+
-							"<select type='text' id='catalog_image_status"+index+"' name='catalog_image_status["+index+"]' class='form-control required'>"+
-								"<option value='Active'>Active</option>"+
-								"<option value='Inactive'>In-Active</option>"+
-							"</select>"+
-						"</td>"+
-									
-						"<td>"+
-							"<button type='button' class='btn-primary remove'>"+
-								"<i class='fa fa-remove'></i>"+
-							"</button>"+
-						"</td>"+
-					"</tr>";
-			$('#tbl_catalog_images').find("tbody").append($html);
-		});
-		
-		$('#tbl_catalog_images').on('click', '.remove', function () {
-			$(this).closest('tr').remove();
-		});
-		
-		$('#tbl_catalog_images').on('click', '.remove_uploaded_image', function () {
-			var ans = confirm("Are you sure you want to delete this image ?");
-			if(ans)
-			{	
-				$(this).closest('tr').remove();
-			}
-		});
-		
-		/* check for duplicate catalog image title */
-		$('#tbl_catalog_images').on('click, blur, onkeyup', '.catalog_image_title', function () {
-			var $elements = $('.catalog_image_title');
-			var flag = false;
-			
-			$elements.each(function () {
-				var selectedValue = this.value;
-				if(selectedValue != "")
-				{
-					$elements
-						.not(this)
-						.filter(function() {
-							if(!flag)
-							{
-								if(this.value.trim() == selectedValue.trim())
-								{
-									flag  = true;
-									$(this).val("");
-									alert('Duplicate title');
-									return false;
-								}	
-							}	
-						});
-				}
-			});
-		});
-		
-		/* check for default image - only one image can be set as default */
-		$('#tbl_catalog_images').on('click', '.default', function () {
-			var $elements = $('.default');
-		
-			var flag = false;
-			
-			$elements.each(function () {
-					var selectedValue = this.value;
-					if(selectedValue == "1")
-					{
-						// alert(selectedValue);
-						$elements
-							.not(this)
-							.filter(function() {
-								if(!flag)
-								{
-									if(this.value == selectedValue)
-									{
-										flag  = true;
-										$(this).val(0);
-										alert('Already selected default image');
-										return false;
-									}	
-								}	
-							});
-					}
-					
-				});
-		});
-		
-		
-	});
-
-
-
-
-
-
-
-
-
-
-
-
+  $( document ).ready(function() 
+  {
+    $(".addCatalogImage").click(function(){
+      var index = 1;
+      
+      $("#tbl_catalog_images tbody tr").each(function(){
+        index = index + 1;
+      });
+      
+      $html = "<tr>"+
+            "<td>"+
+              "<input type='file' id='file"+index+"' name='file"+index+"' class='form-control required' />"+
+              
+              "<input type='hidden' name='catalog_image_name["+index+"]' id='catalog_image_name"+index+"'>"+
+              "<input type='hidden' name='catalog_image_id["+index+"]' id='catalog_image_id"+index+"'>"+
+            "</td>"+
+            
+            "<td>"+
+              "<input type='text' id='catalog_image_title"+index+"' name='catalog_image_title["+index+"]' class='form-control catalog_image_title required' />"+
+            "</td>"+
+            
+            "<td>"+
+              "<input type='number' id='catalog_image_price"+index+"' name='catalog_image_price["+index+"]' class='form-control required' />"+
+            "</td>"+
+            
+            "<td>"+
+              "<select type='text' id='default"+index+"' name='default["+index+"]' class='form-control default required'>"+
+                "<option value='0'>No</option>"+
+                "<option value='1'>Yes</option>"+
+              "</select>"+
+            "</td>"+
+            
+            "<td>"+
+              "<select type='text' id='catalog_image_status"+index+"' name='catalog_image_status["+index+"]' class='form-control required'>"+
+                "<option value='Active'>Active</option>"+
+                "<option value='Inactive'>In-Active</option>"+
+              "</select>"+
+            "</td>"+
+                  
+            "<td>"+
+              "<button type='button' class='btn-primary remove'>"+
+                "<i class='fa fa-remove'></i>"+
+              "</button>"+
+            "</td>"+
+          "</tr>";
+      $('#tbl_catalog_images').find("tbody").append($html);
+    });
+    
+    $('#tbl_catalog_images').on('click', '.remove', function () {
+      $(this).closest('tr').remove();
+    });
+    
+    $('#tbl_catalog_images').on('click', '.remove_uploaded_image', function () {
+      var ans = confirm("Are you sure you want to delete this image ?");
+      if(ans)
+      { 
+        $(this).closest('tr').remove();
+        $.ajax({
+            type: 'post',
+            url: '/deletepicture',
+            data: {
+                '_token':"<?= csrf_token() ?>",
+                'product_image_id': $("#value").val(),
+                
+            },
+            success: function(data) {
+              
+            // var oTable = $('.example').dataTable();
+            // console.log("Table:",oTable);
+          
+            // var data = oTable
+            //     .row("0")
+            //     .data();
+            // console.log(data);
+            setTimeout("location.reload(true);",50);
+            }
+        });
+      }
+    });
+    
+    /* check for duplicate catalog image title */
+    $('#tbl_catalog_images').on('click, blur, onkeyup', '.catalog_image_title', function () {
+      var $elements = $('.catalog_image_title');
+      var flag = false;
+      
+      $elements.each(function () {
+        var selectedValue = this.value;
+        if(selectedValue != "")
+        {
+          $elements
+            .not(this)
+            .filter(function() {
+              if(!flag)
+              {
+                if(this.value.trim() == selectedValue.trim())
+                {
+                  flag  = true;
+                  $(this).val("");
+                  alert('Duplicate title');
+                  return false;
+                } 
+              } 
+            });
+        }
+      });
+    });
+    
+    /* check for default image - only one image can be set as default */
+    $('#tbl_catalog_images').on('click', '.default', function () {
+      var $elements = $('.default');
+    
+      var flag = false;
+      
+      $elements.each(function () {
+          var selectedValue = this.value;
+          if(selectedValue == "1")
+          {
+            // alert(selectedValue);
+            $elements
+              .not(this)
+              .filter(function() {
+                if(!flag)
+                {
+                  if(this.value == selectedValue)
+                  {
+                    flag  = true;
+                    $(this).val(0);
+                    alert('Already selected default image');
+                    return false;
+                  } 
+                } 
+              });
+          }
+          
+        });
+    });
+    
+    
+  });
 
 
 
 
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

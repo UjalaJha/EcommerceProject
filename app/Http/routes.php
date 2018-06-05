@@ -21,6 +21,8 @@ Route::get('/city','CityController@index');
 Route::get('/cityjson','CityController@jsondata');
 Route::post ( '/deleteitem','CityController@delete' );
 Route::post ( '/edititem','CityController@editdata' );
+Route::get('/export', 'CityController@export');
+Route::post('/import', 'CityController@import');
 
 
 
@@ -31,13 +33,19 @@ Route::get('/productsjson','ProductController@jsondata');
 Route::get('/productaddedit/{data?}','ProductController@addedit');
 Route::get('/changestatus/{id}','ProductController@changestatus');
 Route::post ('/productsubmitForm','ProductController@submitform' );
+Route::post ('/deletepicture','ProductController@deletepicture' );
+Route::get('/purchase','ProductController@purchase');
+Route::get('/print','ProductController@printcopy');
+
+
+
 
 
 //test without datable.js
 Route::post('/cityTest/list','CityTestController@getCity');
 Route::get('/citytest','CityTestController@index');
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/check', function () {
+    return view('pdf1');
 });
 Route::get('/log_in', function () {
     return view('authenticate.login');
