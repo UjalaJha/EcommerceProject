@@ -20,16 +20,14 @@
         <div class="col-xs-6">
           <div class="form-group">
             <label for="usr">Name:</label>
-            <input type="text" class="form-control" id="usr">
+            <input type="text" class="form-control" id="usr" value='{!!$data->cname!!}'>
           </div>
         </div>
         <div class="container-fluid">
         <div class="col-xs-6">
           <div class="form-group">
           <label for="usr">Date:</label>
-          <input type="text" class="form-control" id="usr" value=<?php
-          echo(date("Y-m-d"));
-          ?> >
+          <input type="text" class="form-control" id="usr" value='{!!$data->date!!}'>
           </div>
         </div>
       </div>
@@ -56,21 +54,21 @@
           <tbody>
             <tr>
               <td>1</td>
-              <td>Data1</td>
-              <td class="text-center">10.99</td>
-              <td class="text-center">1</td>
-              <td class="text-right">10.99</td>
+              <td>{!!$data->productname!!}</td>
+              <td class="text-center">{!!$data->price!!}</td>
+              <td class="text-center">{!!$data->quantity!!}</td>
+              <td class="text-right">{!!$data->total!!}</td>
             </tr>
             <tr>
               <td>1</td>
-              <td>Data2</td>
+              <td>Dummy Data2</td>
               <td class="text-center">20.00</td>
               <td class="text-center">3</td>
               <td class="text-right">60.00</td>
             </tr>
             <tr>
               <td>1</td>
-              <td>Data3</td>
+              <td>Dummy Data3</td>
               <td class="text-center">600.00</td>
               <td class="text-center">1</td>
               <td class="text-right">600.00</td>
@@ -80,21 +78,21 @@
               <td class="thick-line"></td>
               <td class="thick-line"></td>
               <td class="thick-line text-center"><strong>Subtotal</strong></td>
-              <td class="thick-line text-right">670.99</td>
+              <td class="thick-line text-right">{!!$data->subtotal!!}</td>
             </tr>
             <tr>
               <td></td>
               <td class="no-line"></td>
               <td class="no-line"></td>
               <td class="no-line text-center"><strong>Shipping</strong></td>
-              <td class="no-line text-right">15</td>
+              <td class="no-line text-right">{!!$data->shipping!!}</td>
             </tr>
             <tr>
               <td></td>
               <td class="no-line"></td>
               <td class="no-line"></td>
-              <td class="no-line text-center"><strong>Total</strong></td>
-              <td class="no-line text-right">685.99</td>
+              <td class="no-line text-center"><strong>Total Amount</strong></td>
+              <td class="no-line text-right">{!!$data->totalrs!!}</td>
             </tr>
           </tbody>
 

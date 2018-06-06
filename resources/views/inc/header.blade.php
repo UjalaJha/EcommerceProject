@@ -24,7 +24,11 @@
     
     <link rel="manifest" href="/css/manifest.json">
     <link href="/css/select2.css" type="text/css" rel="stylesheet" />
-	<!-- start: JavaScript -->	
+	<!-- start: JavaScript -->
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" 
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" 
+        crossorigin="anonymous">
+	</script>	
 	<script type='text/javascript' src="/js/jquery-2.1.4.min.js"></script>
 	<script type='text/javascript' src="/js/plugins/jquery-ui.custom.min.js"></script>
 	<script type='text/javascript' src="/js/essential-plugins.js"></script>
@@ -35,6 +39,7 @@
 	<script type='text/javascript' src="/js/jquery.validate.js"></script>
 	<script type='text/javascript' src="/js/additional-methods.js"></script>
 	<script type='text/javascript' src="/js/plugins/bootstrap-datepicker.min.js"></script>
+	<script type='text/javascript' src="/js/jquery.invoice.js"></script>
 	<!-- Datatable plugin-->
 	<script type='text/javascript' src='/js/jquery.dataTables.min.js'></script>
 	<script type='text/javascript' src='/js/datatable.js'></script>

@@ -68,33 +68,34 @@ $( document ).ready(function() {
 	
 });
 
-	function changestatus(id)
-	{
-    	var r=confirm("Are you sure you want to change status for this record?");
-    	if (r==true)
-   		{
-			$.ajax({
-				url: "/changestatus/"+id,
-				async: false,
-				type: "get",
-                // _token:"<?= csrf_token() ?>",
-				success: function(data2){
-					data2 = $.trim(data2);
-					if(data2 == "1")
-					{
-						displayMsg("success","Record has been updated!");
-						setTimeout("location.reload(true);",1000);
-						
-					}
-					else
-					{
-						displayMsg("error","Oops something went wrong!");
-						setTimeout("location.reload(true);",1000);
-					}
+function changestatus(id)
+{
+	var r=confirm("Are you sure you want to change status for this record?");
+	if (r==true)
+		{
+		$.ajax({
+			url: "/changestatus/"+id,
+			async: false,
+			type: "get",
+            // _token:"<?= csrf_token() ?>",
+			success: function(data2){
+				data2 = $.trim(data2);
+				if(data2 == "1")
+				{
+					displayMsg("success","Record has been updated!");
+					setTimeout("location.reload(true);",1000);
+					
 				}
-			});
-    	}
-    }
-	document.title = "Products";
+				else
+				{
+					displayMsg("error","Oops something went wrong!");
+					setTimeout("location.reload(true);",1000);
+				}
+			}
+		});
+	}
+}
+document.title = "Products";
+
 </script>
 @include('inc.footer')

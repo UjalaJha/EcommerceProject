@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\City;
+use App\Product;
 use DB;
 use Excel;
 use Illuminate\Support\Facades\Input;
@@ -206,17 +207,17 @@ class CityController extends Controller
 
     
 
-    public function export()
+    public function export(Request $request)
     {
         
-        $data = City::get()->toArray();
+        $data = Product::get()->toArray();
         return Excel::create('city list', function($excel) use ($data) {
             $excel->sheet('mySheet', function($sheet) use ($data)
             {
                 $sheet->fromArray($data);
             });
 
-        })->download('pdf');
+        })->download('csv');
     }
     public function import(Request $request)
     {
@@ -260,7 +261,7 @@ class CityController extends Controller
                 else
                 {
                      $request->session()->flash('alert-warning', 'No data to import!');
-                        return redirect('/city');
+                    return redirect('/city');
                 }
                 
             }   

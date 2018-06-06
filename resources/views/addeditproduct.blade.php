@@ -94,6 +94,7 @@
 
               <tbody>
 
+                <!-- To fetch and print existing image from db -->
                 @if(!empty($images) && count($images) > 0)
                   <?php $i = 0; ?>
                   @foreach($images as $image)
@@ -106,28 +107,28 @@
 
                       <input  type="file" id="filec" name="filec" class="form-control" />
 
-                      <input type="hidden" name="product_image_name[{{<?php echo $i;?>}}]" value="<?php if(!empty($image['product_image_name'])) echo $image['product_image_name']; ?>">
+                      <input type="hidden" name="product_image_name[{!!$i!!}]" value='{!!$image->product_image_name!!}'>
 
-                      <input name="product_image_id[<?php echo $i;?>]" id=productimageid value="<?php if(!empty($image['product_image_id'])) echo $image['product_image_id']; ?>">
+                      <input type="hidden" name="product_image_id[{!!$i!!}]" id=productimageid value='{!!$image->product_image_id!!}'>
                     </td>
 
                     <td>
-                      <input type="text" id="product_image_title<?php echo $i;?>" name="product_image_title[<?php echo $i;?>]" class="form-control product_image_title required" value="<?php if(!empty($image['product_image_title'])) echo $image['product_image_title']; ?>" />
+                      <input type="text" id="product_image_title{!!$i!!}" name="product_image_title[{!!$i!!}]" class="form-control product_image_title required" value='{!!$image->product_image_title!!}' />
                     </td>
 
                     <td>
-                      <input type="number" id="product_image_price<?php echo $i;?>" name="product_image_price[<?php echo $i;?>]" class="form-control required" value="<?php if(!empty($image['product_image_price'])) echo $image['product_image_price']; ?>"  />
+                      <input type="number" id="product_image_price{!!$i!!}" name="product_image_price[{!!$i!!}]" class="form-control required" value='{!!$image->product_image_price!!}' />
                     </td>
 
                     <td>
-                      <select type="text" id="default<?php echo $i;?>" name="default[<?php echo $i;?>]" class="form-control default required">
+                      <select type="text" id="default{!!$i!!}" name="default[{!!$i!!}]" class="form-control default required">
                         <option <?php if(!empty($image['default_img']) && $image['default_img'] == 0) echo "selected='selected'"; ?> value="0">No</option>
                         <option <?php if(!empty($image['default_img']) && $image['default_img'] == 1) echo "selected='selected'"; ?> value="1">Yes</option>
                       </select>
                     </td>
 
                     <td>
-                      <select type="text" id="product_image_status<?php echo $i;?>" name="product_image_status[<?php echo $i;?>]" class="form-control required">
+                      <select type="text" id="product_image_status{!!$i!!}" name="product_image_status[{!!$i!!}]" class="form-control required">
                         <option <?php if(!empty($image['product_image_status']) && $image['product_image_status'] == "Active") echo "selected='selected'"; ?> value="Active">Active</option>
                         <option  <?php if(!empty($image['product_image_status']) && $image['product_image_status'] == "Inactive") echo "selected='selected'"; ?> value="Inactive">In-Active</option>
                       </select>
@@ -136,12 +137,12 @@
                     <td>
                       <!-- for add button at end of row -->
                       @if($i == 1)
-
                       <button type="button" class="addCatalogImage btn-primary"><i class="fa fa-plus"></i></button>
-
+                      
                       <!-- for remove button at end of row -->
                       @else
-                      <button type="button" class="btn-primary remove_uploaded_image" id=imageid value=<?php echo $image['product_image_id']; ?>>
+                      <button type="button" class="btn-primary remove_uploaded_image" id="imageid" 
+                      value='{!!$image->product_image_id!!}'>
                         <i class="fa fa-remove"></i>
                       </button>
                       @endif
@@ -150,6 +151,7 @@
                   </tr>
                   @endforeach
 
+                <!-- if no image in db give empty row -->
                 @else
                   <tr>
                     <td>
@@ -506,18 +508,6 @@
   });
 
 
-
-
 </script>
-
-
-
-
-
-
-
-
-
-
 
 @include('inc.footer')

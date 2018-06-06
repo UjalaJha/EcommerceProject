@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Product;
+Use App\cart;
 use App\ProductImages;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
@@ -13,6 +14,8 @@ use Illuminate\Http\UploadedFile;
 // use Illuminate\Contracts\Validation\Validator;
 // use Illuminate\Foundation\Validation\ValidatesRequests;
 use Validator;
+use PDF;
+
 use Illuminate\Support\Facades\Redirect;
 
 //use App\Http\Controllers\Response;
@@ -88,12 +91,41 @@ class ProductController extends Controller
 
         return view('productbuy');
     }
-    public function printcopy()
+    public function printcopy(Request $request)
     {
-        $pdf = \App::make('dompdf.wrapper');
-        $pdf->loadView('pdf');
-        // $pdf = PDF::loadView('pdf.invoice', $data);
+        // $data=array('cname','date');
+        // $data[$cname]=$request->input('cname');
+        // echo $request->input('cname');
+        // echo $data->cname;
+
+        $data=new cart;
+        $data->cname = $request->input('cname');
+        $data->date = $request->input('date');
+        $data->subtotal = $request->input('subtotal');
+        $data->discount = $request->input('discount');
+        $data->shipping = $request->input('shipping');
+        $data->totalrs = $request->input('totalrs');
+        $data->productname = $request->input('name1');
+        $data->price = $request->input('price1');
+        $data->quantity = $request->input('quantity1');
+        $data->total = $request->input('total1');
+        $data->save();
+        // $pdf = \App::loadView('pdf', compact('data'));
+        // return $pdf->stream();
+        // return view('pdf')->with('data',$data);
+        // $data=$request;
+        // $pdf = \App::make('dompdf.wrapper');
+        // $pdf = \App::loadView('pdf', compact('data'));
+        // return $pdf->stream();
+        
+        // $pdf = \App::make('dompdf.wrapper');
+        // $pdf->loadView('pdf');
+        $pdf = PDF::loadView('pdf', compact('data'));
         return $pdf->stream();
+
+        // $data=$request;
+        // $pdf = PDF::loadView('pdf', compact('data') )->save('test.pdf');
+
     }
     public function deletepicture(Request $request)
     {
@@ -154,46 +186,45 @@ class ProductController extends Controller
 
                 if(!empty($request->catalog_image_title ))
                 {
-                  foreach($request->catalog_image_title as $key=>$value)
-                { 
-                    if($request->file.$key)
-                    {
-                        $file = $request->File('file'.$key)->getPathName();
-                        $imageName = $request->File('file'.$key)->getClientOriginalName();
-                        $path = base_path() . '/public/cover_images/';
-                        $request->File('file'.$key)->move($path , $imageName);
-                        $fileNameToStore = $imageName;
-                    }
-                    else
-                    {
-                        $fileNameToStore='noimage.jpg';
-                    }
+                    foreach($request->catalog_image_title as $key=>$value)
+                    { 
+                        if($request->file.$key)
+                        {
+                            $file = $request->File('file'.$key)->getPathName();
+                            $imageName = $request->File('file'.$key)->getClientOriginalName();
+                            $path = base_path() . '/public/cover_images/';
+                            $request->File('file'.$key)->move($path , $imageName);
+                            $fileNameToStore = $imageName;
+                        }
+                        else
+                        {
+                            $fileNameToStore='noimage.jpg';
+                        }
 
 
-                    $picture = array(); 
-                    //$picture['product_image_name']=$request->catalog_image_name[$key];
-                    $picture['product_image_title']=$request->catalog_image_title[$key];
-                    $picture['product_image_name']= $fileNameToStore;
-                    $picture['product_image_price']=$request->catalog_image_price[$key];
-                    $picture['default_img']=$request->default[$key];
-                    $picture['product_image_status']=$request->catalog_image_status[$key];
-                    $picture['created_on'] = date('Y-m-d H:i:s'); 
-                    $picture['product_id']=$id;
-                    $check=$request->catalog_image_id[$key];
-                    if($check>1)
-                    {
+                        $picture = array(); 
+                        //$picture['product_image_name']=$request->catalog_image_name[$key];
+                        $picture['product_image_title']=$request->catalog_image_title[$key];
+                        $picture['product_image_name']= $fileNameToStore;
+                        $picture['product_image_price']=$request->catalog_image_price[$key];
+                        $picture['default_img']=$request->default[$key];
+                        $picture['product_image_status']=$request->catalog_image_status[$key];
+                        $picture['created_on'] = date('Y-m-d H:i:s'); 
+                        $picture['product_id']=$id;
+                        $check=$request->catalog_image_id[$key];
+                        if($check>1)
+                        {
 
-                    }
-                    else
-                    {
-                        ProductImages::insert($picture); 
-                    }
-                   
+                        }
+                        else
+                        {
+                            ProductImages::insert($picture); 
+                        }
+                       
 
-                }  
+                    }  
                 }
                 
-
 
                 if(!empty($result))
                 {
@@ -210,12 +241,6 @@ class ProductController extends Controller
             }
             else
             {
-                //for new entries
-                // $this->validate($request, [
-                // 'product_name' => 'required|unique:tbl_products',
-                // 'product_code' => 'required|unique:tbl_products',
-                // 'meta_title' => 'required'
-                // ]);
                 $validator = Validator::make($request->all(), [
                     'product_name' => 'required|unique:tbl_products',
                     'product_code' => 'required|unique:tbl_products',

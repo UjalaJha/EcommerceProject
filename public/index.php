@@ -46,6 +46,7 @@ $app = require_once __DIR__.'/../bootstrap/app.php';
 | and wonderful application we have prepared for them.
 |
 */
+ini_set('memory_limit', '-1');
 
 $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 
