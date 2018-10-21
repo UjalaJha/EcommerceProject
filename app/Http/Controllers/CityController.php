@@ -26,7 +26,8 @@ class CityController extends Controller
         // $this->info('Display this on the screen');
         // Log::info('Showing user profile for user: ');
         //print_r("Hello");
-        return view('city');
+        $citydetail=City::all();
+        return view('city')->with('city',$citydetail);
     }
 
     /**
@@ -36,7 +37,7 @@ class CityController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -92,7 +93,7 @@ class CityController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $result=City::where('id',$id)->delete();
     }
 
     //Fetch and edit data from DB 
