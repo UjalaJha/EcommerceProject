@@ -58,3 +58,7 @@ Route::get('/log_in', function () {
 Route::auth();
 
 Route::get('/home', 'HomeController@index');
+
+Route::auth();
+
+Route::get('/home', 'HomeController@index');
