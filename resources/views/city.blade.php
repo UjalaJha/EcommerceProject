@@ -240,4 +240,7 @@ $('.modal-footer').on('click', '.edit', function() {
       });
     });
 </script>
+<script>
+  console.log('hello');
+</script>
 @include('inc.footer')
