@@ -150,7 +150,7 @@ class CityController extends Controller
                     ->limit($rows)
                     ->get();
 
-        $totalFiltered = City::count();
+        $totalFiltered = City::count();// GET COUNT
 
         if(empty($request->input('sSearch_0')))
         {
