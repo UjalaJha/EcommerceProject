@@ -142,7 +142,7 @@ class CityController extends Controller
             $order=strval($request->input('sSortDir_0'));
         }else
         {
-            $order=$default_sort_order;
+            $order=$default_sort_order;//JGJ
         }
         
         $cities = City::orderBy($sort, $order)
