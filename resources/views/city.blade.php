@@ -9,7 +9,7 @@
     <div>
       <ul class="breadcrumb">
         <li><a href="/home"><i class="fa fa-home fa-lg"></i></a></li>
-        <li><a href="/test">TEST</a></li>
+        <li><a href="/test">TEST @ 123</a></li>
       </ul>
     </div>
   </div>
@@ -239,5 +239,8 @@ $('.modal-footer').on('click', '.edit', function() {
           }
       });
     });
+</script>
+<script>
+  console.log('hello');
 </script>
 @include('inc.footer')
